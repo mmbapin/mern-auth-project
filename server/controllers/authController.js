@@ -54,7 +54,7 @@ export const register = async (req, res) => {
       message: "User registered successfully."
     })
   } catch (error) {
-    ßres.json({
+    res.json({
       success: false,
       message: error.message
     })
@@ -128,7 +128,7 @@ export const logout = async (req, res) => {
 
 export const sendVerifyOtp = async (req, res) => {
   try {
-    const {userId} = req.body;
+    const userId = req.userId;
     const user = await User.findById(userId);
     if(user.isAccountVerified){
       return res.json({
@@ -165,7 +165,8 @@ export const sendVerifyOtp = async (req, res) => {
 }
 
 export const verifyEmail = async (req, res) => {
-  const {userId, otp} = req.body;
+  const {otp} = req.body;
+  const userId = req.userId;
   if(!userId || !otp){
     return res.json({
       success: false,
