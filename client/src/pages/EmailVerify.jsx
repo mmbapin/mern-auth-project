@@ -1,4 +1,4 @@
-import React, { useRef, useContext } from "react";
+import React, { useRef, useContext, useEffect } from "react";
 import { assets } from "../assets/assets";
 import { useNavigate } from "react-router-dom";
 import { AppContext } from "../context/AppContext";
@@ -9,7 +9,7 @@ const EmailVerify = () => {
   const inputRef = useRef([]);
   axios.default.withCredentials = true;
   const navigate = useNavigate();
-  const { backendUrl, isLoggedin, userData, getUserData } =
+  const { backendUrl, isLoggedIn, userData, getUserData } =
     useContext(AppContext);
 
   const handleInput = (e, index) => {
@@ -48,12 +48,18 @@ const EmailVerify = () => {
         getUserData();
         navigate("/");
       } else {
-        toast.error(error.message);
+        toast.error(data.message);
       }
     } catch (error) {
       toast.error(error.message);
     }
   };
+
+  useEffect(() => {
+    if (isLoggedIn && userData && userData.isAccountVerified) {
+      navigate("/");
+    }
+  }, [isLoggedIn, userData]);
   return (
     <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-blue-200 to-purple-500">
       <img

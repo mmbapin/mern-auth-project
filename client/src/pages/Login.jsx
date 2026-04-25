@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { assets } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
 import { AppContext } from '../context/AppContext'
@@ -8,7 +8,7 @@ import axios from 'axios';
 
 const Login = () => {
   const navigate = useNavigate();
-  const {backendUrl, setIsLoggedIn, getUserData} = useContext(AppContext);
+  const {backendUrl, setIsLoggedIn, getUserData, isLoggedIn, userData} = useContext(AppContext);
 
 
   const [isLoginPage, setIsLoginPage] = useState(true);
@@ -16,6 +16,11 @@ const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
+  useEffect(() => {
+    if (isLoggedIn && userData && userData.isAccountVerified) {
+      navigate("/");
+    }
+  }, [isLoggedIn, userData])
 
   const onSubmitHandler = async (e) => {
     try {
